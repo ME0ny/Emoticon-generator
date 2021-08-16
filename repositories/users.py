@@ -1,7 +1,9 @@
 from .base import BaseRepository
 from db.users import users
 from typing import List, Optional
-from models.users import User, UserIn
+from models.user import User, UserIn
+from core.security import hashed_password
+
 class UserRepository(BaseRepository):
     
     async def get_by_id(self, id: int) -> Optional[User]:
