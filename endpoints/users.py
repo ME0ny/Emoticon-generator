@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from repositories.users import UserRepository
 from models.user import User, UserIn
 from .depends import get_user_repository, get_current_user
@@ -26,5 +26,5 @@ async def read_by_login(
     login: str = ""):
     user = await users.get_by_login(login=login)
     if user is None or user.login != current_user.login:
-        return HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found user")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found user")
     return user

@@ -19,13 +19,11 @@ def create_access_token(data: dict) -> str:
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def  decode_access_token(token: str):
-    encoded_jwt = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    try:
+        encoded_jwt = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except:
+        return None
     return encoded_jwt
-    # try:
-    #     encoded_jwt = jwt.decode(token, SECRET_KEY, algorithm=ALGORITHM)
-    # except:
-    #     return None
-    # return encoded_jwt
 
 class JWTBearer(HTTPBearer):
     def __init__(self, auto_error: bool = True):
@@ -36,7 +34,6 @@ class JWTBearer(HTTPBearer):
         exp = HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid auth token")
         if credentials:
             token = decode_access_token(credentials.credentials)
-            print("\n"*100, token,credentials.credentials)
             if token is None:
                 raise exp
             return credentials.credentials
