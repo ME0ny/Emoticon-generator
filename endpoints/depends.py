@@ -3,7 +3,6 @@ from db.base import database
 from models.user import User
 from fastapi import Depends, HTTPException, status
 from core.security import JWTBearer, decode_access_token
-from models.user import User
 
 def get_user_repository() -> UserRepository:
     return UserRepository(database)
@@ -23,3 +22,4 @@ async def get_current_user(
     if user is None:
         return cred_expectation
     return user
+
