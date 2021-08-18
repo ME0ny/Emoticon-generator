@@ -7,7 +7,7 @@ from repositories.emoticon import emoticon_request
 router = APIRouter()
 
 @router.get("/")
-def get_emoticon(
+async def get_emoticon(
     current_user: User = Depends(get_current_user),
     name: str = ""):
     img = emoticon_request(name)
