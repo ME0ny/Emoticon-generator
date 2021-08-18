@@ -4,16 +4,48 @@ services:
     image: postgres:11
     restart: always
     ports:
-      - 32700:5432
+      - 32701:5432
     volumes:
       - ./data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: emoticon_generator
+    networks:
+     - emoticon
   dnmonster:
     image: amouat/dnmonster
     restart: always
     ports:
       - 5431:8080
+    networks:
+     - emoticon
+  server:
+    image: emoticon_server
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      EG_DATABASE_URL: postgresql://root:root@db:5432/emoticon_generator
+      ES_URL: http://dnmonster:8080
+    depends_on:
+      - dnmonster
+      - db
+    networks:
+      - emoticon
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - server
+    ports:
+      - 80:80
+    networks:
+      - emoticon
+networks:
+  emoticon:
+    external: true
+
 
