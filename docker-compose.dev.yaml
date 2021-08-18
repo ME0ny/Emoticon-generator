@@ -21,7 +21,7 @@ services:
     networks:
      - emoticon
   server:
-    image: meony/emoticon_server
+    image: meony/emoticon_server:emoticon_server
     restart: always
     ports:
       - 8000:8000
